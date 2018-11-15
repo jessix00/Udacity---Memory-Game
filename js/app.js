@@ -25,6 +25,18 @@ function shuffle(array) {
     return array;
 }
 
+const cards = document.getElementsByClassName('card');
+const openCards = [];
+
+//Iterates card list and adds class of "open" and "show" to cards if clicked 
+for (const card of cards) {
+    card.addEventListener("click", function() {
+
+        card.classList.add('open', 'show');
+    });
+
+};
+
 
 /*
  * set up the event listener for a card. If a card is clicked:
