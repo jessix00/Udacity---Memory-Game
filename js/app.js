@@ -25,17 +25,37 @@ function shuffle(array) {
     return array;
 }
 
-const cards = document.getElementsByClassName('card');
-const openCards = [];
+//custom code 
+const cards = document.querySelectorAll('.card');
+console.log(cards);
+let toggleCards = [];
 
-//Iterates card list and adds class of "open" and "show" to cards if clicked 
-for (const card of cards) {
-    card.addEventListener("click", function() {
+//This funtion toggles the class of open or show to cards
+function toggleCard(clickTarget) {
+    clickTarget.classList.toggle('open');
+    clickTarget.classList.toggle('show');
+}
 
-        card.classList.add('open', 'show');
-    });
+function addToggleCard(clickTarget) {
+    toggleCards.push(clickTarget);
+    console.log(toggledCards);
+}
 
+//This loop opens or closes clicked cards
+for (card of cards) {
+    card.addEventListener('click', event => {
+        const clickTarget = event.target;
+        if (clickTarget.classList.contains('card')) {
+            toggleCard(clickTarget);
+            addToggleCard(clickTarget);
+            if (toggleCards.length === 2) {
+                console.log('2Cards!');
+            }
+        }
+    })
 };
+
+
 
 
 /*
