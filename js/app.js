@@ -27,33 +27,55 @@ function shuffle(array) {
 
 //custom code 
 const cards = document.querySelectorAll('.card');
-console.log(cards);
-let toggleCards = [];
+let toggledCards = [];
 
-//This funtion toggles the class of open or show to cards
+//This funtion toggles the class of open or show to clicked cards
 function toggleCard(clickTarget) {
     clickTarget.classList.toggle('open');
     clickTarget.classList.toggle('show');
 }
 
+//this funtion pushes the clicked target into the toggledCards array
 function addToggleCard(clickTarget) {
-    toggleCards.push(clickTarget);
-    console.log(toggledCards);
+    toggledCards.push(clickTarget);
+}
+
+//this funtion checks wether or not a card is a match
+function checkMatch() {
+    if (
+        toggledCards[0].firstElementChild.className ===
+        toggledCards[1].firstElementChild.className
+    ) {
+        toggledCards[0].classList.toggle('match');
+        toggledCards[1].classList.toggle('match');
+        toggledCards = [];
+
+    } else {
+        console.log('Not a match');
+        toggleCard(toggledCards[0]);
+        toggleCard(toggledCards[1]);
+        toggledCards = [];
+    }
+
 }
 
 //This loop opens or closes clicked cards
 for (card of cards) {
     card.addEventListener('click', event => {
         const clickTarget = event.target;
-        if (clickTarget.classList.contains('card')) {
+        if (clickTarget.classList.contains('card') && toggledCards.length < 2) {
             toggleCard(clickTarget);
             addToggleCard(clickTarget);
-            if (toggleCards.length === 2) {
+            if (toggledCards.length === 2) {
                 console.log('2Cards!');
+            }
+            if (toggledCards.length === 2) {
+                checkMatch();
             }
         }
     })
 };
+
 
 
 
