@@ -25,9 +25,10 @@ function shuffle(array) {
     return array;
 }
 
-//custom code 
+//------------------custom code------------------------------------ 
 const cards = document.querySelectorAll('.card');
 let toggledCards = [];
+
 
 //This funtion toggles the class of open or show to clicked cards
 function toggleCard(clickTarget) {
@@ -40,7 +41,7 @@ function addToggleCard(clickTarget) {
     toggledCards.push(clickTarget);
 }
 
-//this funtion checks wether or not a card is a match
+//this funtion checks whether or not a card is a match
 function checkMatch() {
     if (
         toggledCards[0].firstElementChild.className ===
@@ -49,28 +50,28 @@ function checkMatch() {
         toggledCards[0].classList.toggle('match');
         toggledCards[1].classList.toggle('match');
         toggledCards = [];
-
+        //sets timeout allows time to pass before fliping card over when there's no match
     } else {
-        console.log('Not a match');
-        toggleCard(toggledCards[0]);
-        toggleCard(toggledCards[1]);
-        toggledCards = [];
+        setTimeout(() => {
+            toggleCard(toggledCards[0]);
+            toggleCard(toggledCards[1]);
+            toggledCards = [];
+        }, 600);
     }
-
 }
 
-//This loop opens or closes clicked cards
+//This loop opens or closes clicked cards. 
 for (card of cards) {
     card.addEventListener('click', event => {
         const clickTarget = event.target;
-        if (clickTarget.classList.contains('card') && toggledCards.length < 2) {
+        if (clickTarget.classList.contains('card') &&
+            !clickTarget.classList.contains('match') &&
+            toggledCards.length < 2 &&
+            !toggledCards.includes(clickTarget)) {
             toggleCard(clickTarget);
             addToggleCard(clickTarget);
             if (toggledCards.length === 2) {
-                console.log('2Cards!');
-            }
-            if (toggledCards.length === 2) {
-                checkMatch();
+                checkMatch(clickTarget);
             }
         }
     })
