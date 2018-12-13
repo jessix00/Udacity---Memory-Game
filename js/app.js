@@ -26,9 +26,46 @@ function shuffle(array) {
 }
 
 //------------------custom code------------------------------------ 
-const cards = document.querySelectorAll('.card');
-let toggledCards = [];
 
+let toggledCards = [];
+let moves = 0;
+const cards = document.querySelectorAll('.card');
+
+//This funtion will track our moves/clicks
+function addMove() {
+    moves++;
+    const movesText = document.querySelector('.moves');
+    movesText.innerHTML = moves;
+}
+
+//this funtions will add stars next to moves
+function checkScore() {
+    if (moves === 10 || moves === 20) {
+        hideStar();
+    }
+}
+
+function hideStar() {
+    const starList = document.querySelectorAll('.stars li');
+    for (star of starList) {
+        if (star.style.display !== 'none') {
+            star.style.display = 'none';
+            break;
+        }
+    }
+}
+
+
+
+// //this funtion shuffles the deck -- Under construction---
+// function shuffleDeck() {
+//     const cardsToShuffle = Array.from(document.querySelectorAll('.card'));
+//     const shuffledCards = shuffle(cardsToShuffle);
+//     //    for (card of shuffledCards) {
+//     //        cards.appendChild(card);
+//     //    }
+// }
+// shuffleDeck();
 
 //This funtion toggles the class of open or show to clicked cards
 function toggleCard(clickTarget) {
@@ -72,6 +109,8 @@ for (card of cards) {
             addToggleCard(clickTarget);
             if (toggledCards.length === 2) {
                 checkMatch(clickTarget);
+                addMove();
+                checkScore();
             }
         }
     })
