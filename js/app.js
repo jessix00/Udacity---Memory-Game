@@ -1,14 +1,8 @@
-/*
- * Create a list that holds all of your cards
- */
-
-
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
+const deck = document.querySelector('.deck');
+let toggledCards = [];
+let moves = 0;
+let clockOff = true;
+let time = 0;
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -25,11 +19,50 @@ function shuffle(array) {
     return array;
 }
 
-//------------------custom code------------------------------------ 
+//this funtion shuffles our deck 
+function shuffleDeck() {
+    const cardsToShuffle = Array.from(document.querySelectorAll('.card'));
+    const shuffledCards = shuffle(cardsToShuffle);
+    for (card of shuffledCards) {
+        deck.appendChild(card);
+    }
+}
+shuffleDeck();
 
-let toggledCards = [];
-let moves = 0;
-const cards = document.querySelectorAll('.card');
+
+// //This function will track the time it takes to complete the game --- UNDER CONSTRUCTION
+// function startClock() {
+//     let clockId = setInterval(() => {
+//         time++;
+//     }, 1000);
+// };
+// startClock();
+
+// function displayTime() {
+//     const clock = document.querySelector('.clock');
+//     clock.innerHTML = time;
+// }
+
+//click event handler 
+deck.addEventListener('click', function() {
+    const clickTarget = event.target;
+    if (clickTarget.classList.contains('card') &&
+        !clickTarget.classList.contains('match') &&
+        toggledCards.length < 2 &&
+        !toggledCards.includes(clickTarget)) {
+        toggleCard(clickTarget);
+        addToggleCard(clickTarget);
+        //       if (clockOff) {
+        //           startClock();
+        //           clockOff = false;
+    }
+
+    if (toggledCards.length === 2) {
+        checkMatch(clickTarget);
+        addMove();
+        checkScore();
+    }
+});
 
 //This funtion will track our moves/clicks
 function addMove() {
@@ -38,7 +71,7 @@ function addMove() {
     movesText.innerHTML = moves;
 }
 
-//this funtions will add stars next to moves
+//these funtions will add stars next to moves
 function checkScore() {
     if (moves === 10 || moves === 20) {
         hideStar();
@@ -54,18 +87,6 @@ function hideStar() {
         }
     }
 }
-
-
-
-// //this funtion shuffles the deck -- Under construction---
-// function shuffleDeck() {
-//     const cardsToShuffle = Array.from(document.querySelectorAll('.card'));
-//     const shuffledCards = shuffle(cardsToShuffle);
-//     //    for (card of shuffledCards) {
-//     //        cards.appendChild(card);
-//     //    }
-// }
-// shuffleDeck();
 
 //This funtion toggles the class of open or show to clicked cards
 function toggleCard(clickTarget) {
@@ -96,37 +117,3 @@ function checkMatch() {
         }, 600);
     }
 }
-
-//This loop opens or closes clicked cards. 
-for (card of cards) {
-    card.addEventListener('click', event => {
-        const clickTarget = event.target;
-        if (clickTarget.classList.contains('card') &&
-            !clickTarget.classList.contains('match') &&
-            toggledCards.length < 2 &&
-            !toggledCards.includes(clickTarget)) {
-            toggleCard(clickTarget);
-            addToggleCard(clickTarget);
-            if (toggledCards.length === 2) {
-                checkMatch(clickTarget);
-                addMove();
-                checkScore();
-            }
-        }
-    })
-};
-
-
-
-
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
