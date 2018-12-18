@@ -54,6 +54,35 @@ function displayTime() {
     }
 }
 
+//modal 
+function toggleModal() {
+    const modal = document.querySelector('.modal-background');
+    modal.classList.toggle('hide');
+}
+
+toggleModal() // Open Modal
+toggleModal() // Close Modal
+
+//modal Test
+moves = 16;
+checkScore();
+
+writeModalStats();
+//toggleModal(); //open modal
+
+function writeModalStats() {
+    const movesStat = document.querySelector('.modal-moves-count');
+    const starsStat = document.querySelector('.modal-star-count');
+    const stars = getStars();
+
+    movesStat.innerHTML = `${moves} Moves`;
+    starsStat.innerHTML = `${stars}`;
+}
+
+document.querySelector('.modal-replay-btn').addEventListener('click', () => {
+    //TODO: Call reset game
+});
+
 
 //click event handler 
 deck.addEventListener('click', function() {
@@ -99,6 +128,18 @@ function hideStar() {
             break;
         }
     }
+}
+
+//tracks the amount of stars remaining
+function getStars() {
+    stars = document.querySelectorAll('.stars li');
+    starCount = 0;
+    for (star of stars) {
+        if (star.style.display !== 'none') {
+            starCount++;
+        }
+    }
+    return starCount;
 }
 
 //This funtion toggles the class of open or show to clicked cards

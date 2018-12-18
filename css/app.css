@@ -22,6 +22,50 @@ body {
     font-family: 'Coda', cursive;
 }
 
+.hide {
+    display: none;
+}
+
+.modal-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: #fff;
+}
+
+.modal-content {
+    text-align: center;
+    margin-top: 10%;
+    margin-right: auto;
+    margin-left: auto;
+    height: 30%;
+    width: 30%;
+}
+
+.modal-congrats {
+    display: block;
+    font-size: 30px;
+    color: rgb(28, 183, 204);
+    margin: 15px;
+}
+
+.modal-stats {
+    display: block;
+    font-size: 15px;
+}
+
+.modal-replay-btn {
+    background-color: rgb(28, 183, 204);
+    font-size: 15px;
+    padding: 10px;
+    margin: 18px;
+    border: none;
+    border-radius: 5%;
+    color: #fff;
+}
+
 .container {
     display: flex;
     justify-content: center;
