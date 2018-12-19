@@ -1,12 +1,13 @@
 //Global Scope Variables & Conditions
 const deck = document.querySelector('.deck');
-const total_pairs = 8;
+const totalPairs = 8;
 let toggledCards = [];
 let moves = 0;
 let clockOff = true;
 let time = 0;
 let clockId;
 let matched = 0;
+
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -66,11 +67,16 @@ function checkMatch() {
 
 // //This function will start counting seconds and push its results to the displayTime function 
 function startClock() {
-    let clockId = setInterval(() => {
+    clockId = setInterval(() => {
         time++;
         displayTime();
     }, 1000);
 };
+
+//This function stops the clock
+function stopClock() {
+    clearInterval(clockId);
+}
 
 //This funtions takes the seconds from the startClock funtion and displays is as minutes and seconds in the HTML document
 function displayTime() {
@@ -83,11 +89,6 @@ function displayTime() {
     } else {
         clock.innerHTML = `${minutes}:${seconds}`;
     }
-}
-
-//This function stops the clock
-function stopClock() {
-    clearInterval(clockId);
 }
 
 //This funtion will track moves/clicks
@@ -115,7 +116,7 @@ function checkScore() {
     }
 }
 
-//tracks the amount of stars remaining for our modal stats
+//tracks the amount of stars remaining for our modal stats. Will always leave one on document
 function getStars() {
     stars = document.querySelectorAll('.stars li');
     starCount = 0;
@@ -128,7 +129,7 @@ function getStars() {
 }
 
 //MODAL////
-//This funtion open or hides our modal by adding or removing the css class of hide 
+//This funtion opens or hides our modal by adding or removing the css class of hide 
 function toggleModal() {
     const modal = document.querySelector('.modal-background');
     modal.classList.toggle('hide');
@@ -138,8 +139,8 @@ toggleModal() // Close Modal
 
 //Takes the value of variables and writes them to the HTML document that contains selected class
 function writeModalStats() {
-    const movesStat = document.querySelector('.modal-moves-count');
-    const starsStat = document.querySelector('.modal-star-count');
+    const movesStat = document.querySelector('.modalMovesCount');
+    const starsStat = document.querySelector('.modalStarCount');
     const stars = getStars();
     movesStat.innerHTML = `${moves} Moves`;
     starsStat.innerHTML = `${stars}`;
@@ -154,10 +155,10 @@ deck.addEventListener('click', function() {
         !toggledCards.includes(clickTarget)) {
         toggleCard(clickTarget);
         addToggleCard(clickTarget);
+
         if (clockOff) {
             startClock();
             clockOff = false;
-
         }
         if (toggledCards.length === 2) {
             checkMatch(clickTarget);
@@ -165,11 +166,10 @@ deck.addEventListener('click', function() {
             checkScore();
         }
     }
+    if (matched === totalPairs) {
+        gameOver();
+    }
 });
-
-
-document.querySelector('.modal-replay-btn').addEventListener('click', replayGame);
-document.querySelector('.restart').addEventListener('click', resetGame);
 
 //reset/restart game functions
 function resetGame() {
@@ -178,6 +178,7 @@ function resetGame() {
     resetStars();
     shuffleDeck();
     resetCards();
+    resetMatched();
 }
 
 //Resets clock time
@@ -186,7 +187,12 @@ function resetClockAndTime() {
     clockOff = true;
     time = 0;
     displayTime();
-} //TODO: fix clock reset. it keeps counting after reset buttons are clicked.
+}
+
+//Sets matched count to zero
+function resetMatched() {
+    matched = 0;
+}
 
 //Reset game moves
 function resetMoves() {
@@ -203,7 +209,7 @@ function resetStars() {
     }
 }
 
-//Reset reset card
+//Reset cards
 function resetCards() {
     const cards = document.querySelectorAll('.deck li');
     for (let card of cards) {
@@ -211,17 +217,22 @@ function resetCards() {
     }
 }
 
-if (matched === total_pairs) {
-    gameOver();
-}
-
-function gameOver() {
-    stopClock();
-    toggleModal();
-    writeModalStats();
-}
-
+//calls the resetGame function and opens the modal
 function replayGame() {
     resetGame();
     toggleModal();
 }
+
+//Stops the clock, reshuffles all cards, writes our stats to modal, opens modal and resets the matched count
+function gameOver() {
+    stopClock();
+    resetCards();
+    writeModalStats();
+    toggleModal();
+    resetMatched();
+}
+
+//This resets the game if replay icon is clicked on game screen
+document.querySelector('.modal-replay-btn').addEventListener('click', replayGame);
+//This restarts the game if the play again button is clicked on the modal screen
+document.querySelector('.restart').addEventListener('click', resetGame);
