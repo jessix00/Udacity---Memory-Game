@@ -1,5 +1,6 @@
 html {
     box-sizing: border-box;
+    font-family: 'Major Mono Display', monospace;
 }
 
 *,
@@ -17,9 +18,8 @@ body {
 }
 
 body {
-    background: #ffffff url('../img/geometry2.png');
+    background: #ffffff url('../img/geometry3.png');
     /* Background pattern from Subtle Patterns */
-    font-family: 'Coda', cursive;
 }
 
 .hide {
@@ -64,6 +64,7 @@ body {
     border: none;
     border-radius: 5%;
     color: #fff;
+    font-family: 'Major Mono Display', monospace;
 }
 
 .container {
@@ -74,7 +75,6 @@ body {
 }
 
 h1 {
-    font-family: 'Open Sans', sans-serif;
     font-weight: 300;
 }
 
@@ -86,7 +86,7 @@ h1 {
 .deck {
     width: 660px;
     min-height: 680px;
-    background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
+    background: linear-gradient(to bottom, rgba(203, 96, 179, 1) 0%, rgba(168, 0, 119, 1) 0%, rgba(193, 70, 161, 1) 50%, rgba(219, 54, 164, 1) 71%);
     padding: 32px;
     border-radius: 10px;
     box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
