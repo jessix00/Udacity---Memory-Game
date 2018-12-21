@@ -1,13 +1,22 @@
-//Global Scope Variables & Conditions
-const deck = document.querySelector('.deck');
-const totalPairs = 8;
-let toggledCards = [];
-let moves = 0;
+//Global Scope
+const allCards = document.querySelector('.deck');
+//This variable stores our fontAwesome icon classes that will later be passed to the HTML document
+const cardClasses = ['fa-leaf', 'fa-leaf',
+    'fa-bicycle', 'fa-bicycle',
+    'fa-anchor', 'fa-anchor',
+    'fa-bomb', 'fa-bomb',
+    'fa-paper-plane-o', 'fa-paper-plane-o',
+    'fa-cube', 'fa-cube',
+    'fa-bolt', 'fa-bolt',
+    'fa-diamond', 'fa-diamond',
+];
+const totalPossiblePairs = 8;
+let toggledArray = [];
+let totalMoves = 0;
 let clockOff = true;
 let time = 0;
 let clockId;
 let matched = 0;
-
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -24,43 +33,50 @@ function shuffle(array) {
     return array;
 }
 
-//This funtion shuffles our deck 
-function shuffleDeck() {
-    const cardsToShuffle = Array.from(document.querySelectorAll('.card'));
-    const shuffledCards = shuffle(cardsToShuffle);
-    for (card of shuffledCards) {
-        deck.appendChild(card);
-    }
+//template used to generate cards on the document
+function generateCard(clickedCard) {
+    return `<li class="card"><i class="fa ${clickedCard}"></i></li>`;
 }
-shuffleDeck();
+
+//When init is called, the cards are shuffled and created programatically on to the HTML doc using
+//the template provided in the generateCard function
+function init() {
+    const cardHTML = shuffle(cardClasses).map(function(clickedCard) {
+        return generateCard(clickedCard);
+    });
+
+    allCards.innerHTML = cardHTML.join('');
+}
+
+init();
 
 //This funtion toggles the class of open or show to clicked cards
-function toggleCard(clickTarget) {
-    clickTarget.classList.toggle('open');
-    clickTarget.classList.toggle('show');
+function toggleCard(target) {
+    target.classList.toggle('open');
+    target.classList.toggle('show');
 }
 
-//this funtion pushes the clicked target into the toggledCards array
-function addToggleCard(clickTarget) {
-    toggledCards.push(clickTarget);
+//this funtion pushes the clicked target into the toggled array
+function addToggleCard(target) {
+    toggledArray.push(target);
 }
 
 //this funtion checks whether or not a card is a match
-function checkMatch() {
+function match() {
     if (
-        toggledCards[0].firstElementChild.className ===
-        toggledCards[1].firstElementChild.className
+        toggledArray[0].firstElementChild.className ===
+        toggledArray[1].firstElementChild.className
     ) {
-        toggledCards[0].classList.toggle('match');
-        toggledCards[1].classList.toggle('match');
-        toggledCards = [];
+        toggledArray[0].classList.toggle('match');
+        toggledArray[1].classList.toggle('match');
+        toggledArray = [];
         matched++;
         //sets timeout allows time to pass before fliping card over when there's no match
     } else {
         setTimeout(() => {
-            toggleCard(toggledCards[0]);
-            toggleCard(toggledCards[1]);
-            toggledCards = [];
+            toggleCard(toggledArray[0]);
+            toggleCard(toggledArray[1]);
+            toggledArray = [];
         }, 600);
     }
 }
@@ -93,9 +109,9 @@ function displayTime() {
 
 //This funtion will track moves/clicks
 function addMove() {
-    moves++;
+    totalMoves++;
     const movesText = document.querySelector('.moves');
-    movesText.innerHTML = moves;
+    movesText.innerHTML = totalMoves;
 }
 
 //hides stars
@@ -106,13 +122,6 @@ function hideStar() {
             star.style.display = 'none';
             break;
         }
-    }
-}
-
-//hides one star after 10 moves
-function checkScore() {
-    if (moves === 10 || moves === 20) {
-        hideStar();
     }
 }
 
@@ -128,8 +137,43 @@ function getStars() {
     return starCount;
 }
 
-//MODAL////
-//This funtion opens or hides our modal by adding or removing the css class of hide 
+//hides one star after 10 moves
+function checkScore() {
+    if (totalMoves === 10 || totalMoves === 20) {
+        hideStar();
+    }
+}
+
+//click event handler 
+//flips cards depending on the following conditions
+allCards.addEventListener('click', function(clickedCard) {
+    const target = event.target;
+    if (target.classList.contains('card') &&
+        !target.classList.contains('match') &&
+        toggledArray.length < 2 &&
+        !toggledArray.includes(target)) {
+        toggleCard(target);
+        addToggleCard(target);
+        //starts the clock as soon as the first click to a card is made
+        if (clockOff) {
+            startClock();
+            clockOff = false;
+        }
+        //if the length of the clicked cards is equal to 2 then it executes the match function, addMove function and checkScore        
+        if (toggledArray.length === 2) {
+            match(target);
+            addMove();
+            checkScore();
+        }
+    }
+    //when the matched is equal to total possible pairs the gameOver function is called which activates the modal    
+    if (matched === totalPossiblePairs) {
+        gameOver();
+    }
+});
+
+//MODAL
+//This funtion opens or hides our modal by toggling the css class of hide 
 function toggleModal() {
     const modal = document.querySelector('.modal-background');
     modal.classList.toggle('hide');
@@ -142,45 +186,21 @@ function writeModalStats() {
     const movesStat = document.querySelector('.modalMovesCount');
     const starsStat = document.querySelector('.modalStarCount');
     const stars = getStars();
-    movesStat.innerHTML = `${moves} Moves`;
+    movesStat.innerHTML = `${totalMoves} Moves`;
     starsStat.innerHTML = `${stars}`;
 }
 
-//click event handler 
-deck.addEventListener('click', function() {
-    const clickTarget = event.target;
-    if (clickTarget.classList.contains('card') &&
-        !clickTarget.classList.contains('match') &&
-        toggledCards.length < 2 &&
-        !toggledCards.includes(clickTarget)) {
-        toggleCard(clickTarget);
-        addToggleCard(clickTarget);
-
-        if (clockOff) {
-            startClock();
-            clockOff = false;
-        }
-        if (toggledCards.length === 2) {
-            checkMatch(clickTarget);
-            addMove();
-            checkScore();
-        }
-    }
-    if (matched === totalPairs) {
-        gameOver();
-    }
-});
-
-//reset/restart game functions
+//reset & restart game functions
 function resetGame() {
     resetClockAndTime();
     resetMoves();
     resetStars();
-    shuffleDeck();
     resetCards();
     resetMatched();
+    init();
 }
 
+//RESET / REPLAY
 //Resets clock time
 function resetClockAndTime() {
     stopClock();
@@ -196,8 +216,8 @@ function resetMatched() {
 
 //Reset game moves
 function resetMoves() {
-    moves = 0;
-    document.querySelector('.moves').innerHTML = moves;
+    totalMoves = 0;
+    document.querySelector('.moves').innerHTML = totalMoves;
 }
 
 //Reset star counter
@@ -212,10 +232,12 @@ function resetStars() {
 //Reset cards
 function resetCards() {
     const cards = document.querySelectorAll('.deck li');
-    for (let card of cards) {
+    for (card of cards) {
         card.className = 'card';
     }
 }
+
+shuffle(cardClasses)
 
 //calls the resetGame function and opens the modal
 function replayGame() {
