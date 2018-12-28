@@ -183,11 +183,14 @@ toggleModal() // Close Modal
 
 //Takes the value of variables and writes them to the HTML document that contains selected class
 function writeModalStats() {
+    const timeStat = document.querySelector('.modalTimeCount');
+    const clockTime = document.getElementById('clock').innerHTML;
     const movesStat = document.querySelector('.modalMovesCount');
     const starsStat = document.querySelector('.modalStarCount');
     const stars = getStars();
     movesStat.innerHTML = `${totalMoves} Moves`;
     starsStat.innerHTML = `${stars}`;
+    timeStat.innerHTML = `${clockTime}`;
 }
 
 //reset & restart game functions
@@ -198,6 +201,7 @@ function resetGame() {
     resetCards();
     resetMatched();
     init();
+    toggledArray = [];
 }
 
 //RESET / REPLAY
