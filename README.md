@@ -1,5 +1,5 @@
 # Udacity-Memory-Game
-Project two of Udacity's Nano Degree Program
+Project two of Udacity's Nanodegree Program
 
 ## About
 This project is part of Udacity's Front-End Web Developer Course and it requires the use of HTML, CSS, and JavaScript.
@@ -11,7 +11,7 @@ Once all cards are found, the game ends and a modal opens that will display the 
 The modal will also ask the user if he/she would like to play again. If a user plays again, all stats are reverted to zero and the deck 
 is shuffled again, ready for a new game.
 
-## Dependecies 
+## Dependencies 
 * Font-Awesome
 * Google Fonts
 
@@ -20,4 +20,4 @@ Here are some ways you can contribute to my project:
 * by reporting bugs
 * by suggesting new features
 * by writing or editing documentation
-* by writing code ( fix or add js files, add comments, modifiyng styles)
+* by writing code ( fix or add js files, add comments, modifying styles)
