@@ -6,10 +6,14 @@ This project is part of Udacity's Front-End Web Developer Course and it requires
 
 ## Concept
 This Memory Game asks users to find matching cards. If the user finds a match, both cards will flip open. This will continue 
-until the user finds all cards. While the user is playing, stats like time, moves and stars are being stored.
+until the user finds all cards. While the user is playing, stats like time, moves and stars are being tracked.
 Once all cards are found, the game ends and a modal opens that will display the user's stats. 
 The modal will also ask the user if he/she would like to play again. If a user plays again, all stats are reverted to zero and the deck 
 is shuffled again, ready for a new game.
+
+## Dependecies 
+* Font-Awesome
+* Google Fonts
 
 ## Contributing
 Here are some ways you can contribute to my project:
